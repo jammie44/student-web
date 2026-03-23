@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: studyhub-api
+    env: python
+    region: oregon
+    plan: free
+    rootDir: .
+    buildCommand: pip install -r backend/requirements.txt && alembic -c backend/alembic.ini upgrade head
+    startCommand: gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120 --chdir backend
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: studyhub-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "10080"
+      - key: DEBUG
+        value: "false"
+      - key: FRONTEND_URL
+        value: "*"
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+
+databases:
+  - name: studyhub-db
+    databaseName: studyhub
+    user: studyhub_user
+    plan: free
+    region: oregon
