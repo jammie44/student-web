@@ -4,9 +4,8 @@ services:
     env: python
     region: oregon
     plan: free
-    rootDir: .
-    buildCommand: pip install -r backend/requirements.txt && alembic -c backend/alembic.ini upgrade head
-    startCommand: gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120 --chdir backend
+    buildCommand: pip install -r requirements.txt && alembic upgrade head
+    startCommand: gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
