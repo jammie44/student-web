@@ -1,8 +1,11 @@
 from pydantic_settings import BaseSettings
+from pydantic import ConfigDict
 from typing import Optional
 
 
 class Settings(BaseSettings):
+    model_config = ConfigDict(env_file=".env", extra="ignore")
+
     app_name: str = "StudyHub"
     app_version: str = "1.0.0"
     debug: bool = False
@@ -21,10 +24,6 @@ class Settings(BaseSettings):
     # Stripe (optional)
     stripe_secret_key: str = ""
     stripe_webhook_secret: str = ""
-
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
 
     @property
     def pg_database_url(self) -> str:
