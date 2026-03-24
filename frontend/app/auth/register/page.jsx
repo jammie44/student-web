@@ -5,18 +5,20 @@ import Link from 'next/link';
 import { AuthLayout } from '../../../components/auth/AuthLayout';
 import { Input } from '../../../components/ui/Input';
 import { Button } from '../../../components/ui/Button';
-import { APIError } from '../../../lib/api';
-import { getToken } from '../../../lib/auth';
 
 function StrengthBar({ password }) {
-  const checks = [password.length>=8, /[A-Z]/.test(password), /[0-9]/.test(password), /[^A-Za-z0-9]/.test(password)];
+  const checks = [password.length >= 8, /[A-Z]/.test(password), /[0-9]/.test(password), /[^A-Za-z0-9]/.test(password)];
   const score = checks.filter(Boolean).length;
-  const cols = ['','bg-coral-500','bg-gold-500','bg-gold-400','bg-jade-500'];
-  const labels = ['','Weak','Fair','Good','Strong'];
-  const textCols = ['','text-coral-400','text-gold-500','text-gold-400','text-jade-400'];
+  const cols = ['', 'bg-coral-500', 'bg-gold-500', 'bg-gold-400', 'bg-jade-500'];
+  const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+  const textCols = ['', 'text-coral-400', 'text-gold-500', 'text-gold-400', 'text-jade-400'];
   return password ? (
     <div className="space-y-1">
-      <div className="flex gap-1">{[1,2,3,4].map(i=><div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i<=score?cols[score]:'bg-ink-800'}`}/>)}</div>
+      <div className="flex gap-1">
+        {[1,2,3,4].map(i => (
+          <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? cols[score] : 'bg-ink-800'}`} />
+        ))}
+      </div>
       <p className={`text-xs ${textCols[score]}`}>{labels[score]}</p>
     </div>
   ) : null;
@@ -24,12 +26,19 @@ function StrengthBar({ password }) {
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ name:'', email:'', password:'', confirm:'' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { if (getToken()) router.replace('/dashboard'); }, [router]);
+  useEffect(() => {
+    setMounted(true);
+    const token = localStorage.getItem('studyhub_token');
+    if (token) router.replace('/dashboard');
+  }, [router]);
+
+  if (!mounted) return null;
 
   const validate = () => {
     const e = {};
@@ -52,18 +61,23 @@ export default function RegisterPage() {
     setErrors({});
     setLoading(true);
     try {
-      const { api } = await import('../../../lib/api');
-      const { saveAuth } = await import('../../../lib/auth');
-      const data = await api.register(form.email, form.password, form.name);
-      saveAuth(data.access_token, data.user);
-      router.push('/dashboard');
-    } catch (err) {
-      if (err instanceof APIError) {
-        if (err.status === 409) setErrors({ email: 'This email is already registered.' });
-        setServerError(err.message);
+      const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${API}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, password: form.password, name: form.name }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('studyhub_token', data.access_token);
+        localStorage.setItem('studyhub_user', JSON.stringify(data.user));
+        router.push('/dashboard');
       } else {
-        setServerError('Something went wrong. Please try again.');
+        if (res.status === 409) setErrors({ email: 'This email is already registered.' });
+        setServerError(data.detail || 'Registration failed.');
       }
+    } catch {
+      setServerError('Cannot connect to server. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -74,7 +88,9 @@ export default function RegisterPage() {
       <h1 className="text-2xl font-display font-bold text-ink-50 mb-1">Create your account</h1>
       <p className="text-ink-400 text-sm mb-7">
         Already have an account?{' '}
-        <Link href="/auth/login" className="text-gold-400 hover:text-gold-300 font-semibold underline underline-offset-2">Sign in</Link>
+        <Link href="/auth/login" className="text-gold-400 hover:text-gold-300 font-semibold underline underline-offset-2">
+          Sign in
+        </Link>
       </p>
 
       {serverError && (
@@ -84,13 +100,17 @@ export default function RegisterPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        <Input label="Full name"        type="text"     placeholder="Alex Johnson"     value={form.name}     onChange={e=>setForm(p=>({...p,name:e.target.value}))}     error={errors.name}    autoFocus/>
-        <Input label="Email address"    type="email"    placeholder="you@university.edu" value={form.email}  onChange={e=>setForm(p=>({...p,email:e.target.value}))}    error={errors.email}   autoComplete="email"/>
+        <Input label="Full name" type="text" placeholder="Alex Johnson" value={form.name}
+          onChange={e => setForm(p => ({ ...p, name: e.target.value }))} error={errors.name} autoFocus />
+        <Input label="Email address" type="email" placeholder="you@university.edu" value={form.email}
+          onChange={e => setForm(p => ({ ...p, email: e.target.value }))} error={errors.email} autoComplete="email" />
         <div className="space-y-1.5">
-          <Input label="Password"       type="password" placeholder="••••••••••"       value={form.password} onChange={e=>setForm(p=>({...p,password:e.target.value}))} error={errors.password} autoComplete="new-password"/>
-          <StrengthBar password={form.password}/>
+          <Input label="Password" type="password" placeholder="••••••••••" value={form.password}
+            onChange={e => setForm(p => ({ ...p, password: e.target.value }))} error={errors.password} autoComplete="new-password" />
+          <StrengthBar password={form.password} />
         </div>
-        <Input label="Confirm password" type="password" placeholder="••••••••••"       value={form.confirm}  onChange={e=>setForm(p=>({...p,confirm:e.target.value}))}  error={errors.confirm} autoComplete="new-password"/>
+        <Input label="Confirm password" type="password" placeholder="••••••••••" value={form.confirm}
+          onChange={e => setForm(p => ({ ...p, confirm: e.target.value }))} error={errors.confirm} autoComplete="new-password" />
         <div className="pt-1">
           <Button type="submit" size="lg" className="w-full" loading={loading}>Create account</Button>
         </div>
