@@ -7,25 +7,28 @@ from fastapi.exceptions import RequestValidationError
 from app.core.config import settings
 from app.core.database import Base, engine
 
-# Register all models with SQLAlchemy before create_all
-from app.models import User, Subscription, Chat, Message  # noqa: F401
+# Register ALL models so SQLAlchemy creates every table
+from app.models.user import User                       # noqa: F401
+from app.models.subscription import Subscription       # noqa: F401
+from app.models.chat import Chat, Message              # noqa: F401
+from app.models.credits import UserCredits             # noqa: F401
 
 # Import routers
-from app.routes import auth, users, chat, admin, billing
+from app.routes import auth, users, chat, admin, billing, credits
 
-# Create all tables on startup (safe — skips existing tables)
+# Create tables on startup (safe — skips existing tables)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="StudyHub API",
-    description="AI-powered academic platform",
+    description="AI-powered academic platform — powered by Claude claude-sonnet-4-5",
     version=settings.app_version,
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
 )
 
-# CORS — lock to FRONTEND_URL in production
+# CORS
 origins = ["*"] if settings.frontend_url in ("*", "") else [o.strip() for o in settings.frontend_url.split(",")]
 app.add_middleware(
     CORSMiddleware,
@@ -36,7 +39,6 @@ app.add_middleware(
 )
 
 
-# Clean validation error responses
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request, exc):
     errors = exc.errors()
@@ -45,12 +47,13 @@ async def validation_exception_handler(request, exc):
     return JSONResponse(status_code=422, content={"detail": msg})
 
 
-# Register all routers
+# Register routers
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(chat.router)
 app.include_router(admin.router)
 app.include_router(billing.router)
+app.include_router(credits.router)
 
 
 @app.get("/api/health")
