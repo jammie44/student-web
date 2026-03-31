@@ -1,59 +1,40 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-
 from app.core.config import settings
 from app.core.database import Base, engine
+from app.models.user import User          # noqa
+from app.models.chat import Chat, Message # noqa
+from app.models.daily_usage import DailyUsage  # noqa
+from app.routes import auth, users, chat, admin, usage
 
-# Register ALL models so SQLAlchemy creates every table
-from app.models.user import User                       # noqa: F401
-from app.models.subscription import Subscription       # noqa: F401
-from app.models.chat import Chat, Message              # noqa: F401
-from app.models.credits import UserCredits             # noqa: F401
-
-# Import routers
-from app.routes import auth, users, chat, admin, billing, credits
-
-# Create tables on startup (safe — skips existing tables)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="StudyHub API",
-    description="AI-powered academic platform — powered by Claude claude-sonnet-4-5",
     version=settings.app_version,
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
 )
 
-# CORS
 origins = ["*"] if settings.frontend_url in ("*", "") else [o.strip() for o in settings.frontend_url.split(",")]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request, exc):
+async def validation_handler(request, exc):
     errors = exc.errors()
-    first = errors[0] if errors else {}
-    msg = first.get("msg", "Validation error").replace("Value error, ", "")
+    msg = errors[0].get("msg", "Validation error").replace("Value error, ", "") if errors else "Validation error"
     return JSONResponse(status_code=422, content={"detail": msg})
 
 
-# Register routers
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(chat.router)
 app.include_router(admin.router)
-app.include_router(billing.router)
-app.include_router(credits.router)
+app.include_router(usage.router)
 
 
 @app.get("/api/health")

@@ -1,20 +1,18 @@
-import os
-import sys
+import os, sys
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-# repo root is on the path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 from app.core.config import settings
 from app.core.database import Base
-from app.models import User, Subscription, Chat, Message  # noqa: F401
+from app.models.user import User          # noqa
+from app.models.chat import Chat, Message # noqa
+from app.models.daily_usage import DailyUsage  # noqa
 
 config = context.config
 if config.config_file_name:
     fileConfig(config.config_file_name)
-
 config.set_main_option("sqlalchemy.url", settings.pg_database_url)
 target_metadata = Base.metadata
 
@@ -27,11 +25,8 @@ def run_migrations_offline():
 
 
 def run_migrations_online():
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    connectable = engine_from_config(config.get_section(config.config_ini_section),
+                                     prefix="sqlalchemy.", poolclass=pool.NullPool)
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
         with context.begin_transaction():

@@ -23,9 +23,7 @@ services:
         value: "false"
       - key: FRONTEND_URL
         value: "*"
-      - key: STRIPE_SECRET_KEY
-        sync: false
-      - key: STRIPE_WEBHOOK_SECRET
+      - key: HUGGINGFACE_API_KEY
         sync: false
 
 databases:

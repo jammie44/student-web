@@ -10,27 +10,18 @@ from app.core.database import get_db
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 bearer_scheme = HTTPBearer(auto_error=False)
-
-CREDENTIALS_EXCEPTION = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail="Could not validate credentials",
-    headers={"WWW-Authenticate": "Bearer"},
-)
+CREDS_EXC = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
 
 
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
-
+def hash_password(pw: str) -> str:
+    return pwd_context.hash(pw)
 
 def verify_password(plain: str, hashed: str) -> bool:
     return pwd_context.verify(plain, hashed)
 
-
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + (
-        expires_delta or timedelta(minutes=settings.access_token_expire_minutes)
-    )
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=settings.access_token_expire_minutes))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
 
@@ -41,24 +32,19 @@ def get_current_user(
 ):
     from app.models.user import User
     if not credentials:
-        raise CREDENTIALS_EXCEPTION
+        raise CREDS_EXC
     try:
-        payload = jwt.decode(
-            credentials.credentials,
-            settings.secret_key,
-            algorithms=[settings.algorithm],
-        )
-        user_id: str = payload.get("sub")
-        if user_id is None:
-            raise CREDENTIALS_EXCEPTION
+        payload = jwt.decode(credentials.credentials, settings.secret_key, algorithms=[settings.algorithm])
+        uid: str = payload.get("sub")
+        if uid is None:
+            raise CREDS_EXC
     except JWTError:
-        raise CREDENTIALS_EXCEPTION
-
-    user = db.query(User).filter(User.id == user_id).first()
-    if user is None:
-        raise CREDENTIALS_EXCEPTION
+        raise CREDS_EXC
+    user = db.query(User).filter(User.id == uid).first()
+    if not user:
+        raise CREDS_EXC
     if not user.is_active:
-        raise HTTPException(status_code=403, detail="Account is disabled")
+        raise HTTPException(status_code=403, detail="Account disabled")
     return user
 
 

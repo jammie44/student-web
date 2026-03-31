@@ -1,8 +1,14 @@
 import { cn } from '../../lib/utils';
-export function Spinner({size='md',className}){
-  const S={sm:'w-4 h-4',md:'w-6 h-6',lg:'w-8 h-8'};
-  return <div className={cn('border-2 border-ink-700 border-t-gold-500 rounded-full animate-spin',S[size],className)}/>;
+export function Spinner({ size = 'md', className }) {
+  const S = { sm: 'w-4 h-4', md: 'w-6 h-6', lg: 'w-10 h-10' };
+  return <div className={cn('border-2 border-white/10 border-t-blue-400 rounded-full animate-spin', S[size], className)} />;
 }
-export function LoadingDots(){
-  return <div className="flex items-center gap-1">{[0,1,2].map(i=><div key={i} className="w-2 h-2 rounded-full bg-gold-400 loading-dot" style={{animationDelay:`${i*0.2}s`}}/>)}</div>;
+export function LoadingDots() {
+  return (
+    <div className="flex items-center gap-1.5">
+      <div className="loading-dot" />
+      <div className="loading-dot" />
+      <div className="loading-dot" />
+    </div>
+  );
 }
