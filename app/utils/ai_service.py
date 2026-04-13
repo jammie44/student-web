@@ -3029,6 +3029,919 @@ KB["electricity"] = KB["electric circuits"] = KB["ohm's law circuit"] = """## El
 | Energy | Joule | J |
 | Charge | Coulomb | C |"""
 
+# ── ADVANCED MATHEMATICS FROM CURRICULUM ─────────────────────────────────────
+
+KB["peano axioms"] = KB["natural numbers construction"] = KB["foundations of integers"] = """## Foundations of Integers — Peano Axioms
+
+The **natural numbers ℕ** are built from 5 axioms (Peano, 1889):
+
+1. **0 is a natural number**
+2. **Every natural number has a successor** — S(n) is a natural number
+3. **0 is not the successor of any natural number** — no number precedes 0
+4. **Different numbers have different successors** — S(a) = S(b) → a = b
+5. **Induction principle** — if P(0) is true and P(n) → P(S(n)), then P holds for all ℕ
+
+### Mathematical Induction
+
+**Weak Induction:**
+1. Base case: Prove P(0)
+2. Inductive step: Assume P(k), prove P(k+1)
+3. Conclusion: P(n) for all n ∈ ℕ
+
+**Strong Induction:** Assume P holds for ALL values ≤ k, then prove P(k+1)
+
+**Classic proof — Sum of first n natural numbers = n(n+1)/2:**
+
+*Base:* n=1: 1 = 1(2)/2 = 1 ✓
+
+*Step:* Assume 1+2+...+k = k(k+1)/2. Then:
+1+2+...+k+(k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2 ✓
+
+**Proof 2ⁿ > n for n ≥ 1:**
+*Base:* 2¹ = 2 > 1 ✓
+*Step:* 2^(k+1) = 2·2^k > 2k > k+1 (for k ≥ 1) ✓"""
+
+KB["divisibility theory"] = KB["gcd"] = KB["euclidean algorithm"] = KB["bezout"] = """## Divisibility Theory
+
+**a | b** means "a divides b": ∃k ∈ ℤ such that b = ka
+
+**Properties:**
+- a|b and b|c → a|c (transitivity)
+- a|b and a|c → a|(bx + cy) for any integers x, y
+- a|b and b|a → a = ±b
+
+### Euclidean Algorithm (finding GCD)
+
+**Division algorithm:** For any a, b: a = qb + r, 0 ≤ r < b
+
+**Recursive:** gcd(a, b) = gcd(b, a mod b)
+
+**Example — gcd(252, 198):**
+252 = 1·198 + 54
+198 = 3·54 + 36
+54  = 1·36 + 18
+36  = 2·18 + 0
+**gcd(252, 198) = 18**
+
+### Bézout's Identity
+For any integers a, b, there exist x, y such that:
+**ax + by = gcd(a, b)**
+
+**Example — Solve 35x + 15y = 5:**
+gcd(35, 15) = 5 ✓ (solution exists)
+35 = 2·15 + 5 → 5 = 35 - 2·15
+So x = 1, y = -2 is one solution."""
+
+KB["prime numbers"] = KB["prime factorization"] = KB["fundamental theorem of arithmetic"] = KB["sieve of eratosthenes"] = """## Prime Numbers — Deep Theory
+
+**Prime:** A natural number p > 1 with no positive divisors except 1 and p.
+**Composite:** Has factors other than 1 and itself.
+
+### Fundamental Theorem of Arithmetic
+Every integer n > 1 can be uniquely written as a product of primes (up to order).
+
+**Factor 7560 completely:**
+7560 = 2 × 3780 = 2² × 1890 = 2² × 2 × 945 = 2³ × 945
+945 = 3 × 315 = 3² × 105 = 3³ × 35 = 3³ × 5 × 7
+**7560 = 2³ × 3³ × 5 × 7**
+
+### Proof: Infinitely Many Primes (Euclid)
+Assume finite primes: p₁, p₂, ..., pₙ
+Let N = p₁·p₂·...·pₙ + 1
+N is not divisible by any pᵢ (leaves remainder 1)
+So N is either prime or has a prime factor not in our list → contradiction ✓
+
+### Sieve of Eratosthenes
+1. List all integers 2 to n
+2. Start with p = 2; cross out all multiples of 2
+3. Move to next uncrossed number; cross its multiples
+4. Remaining numbers are prime
+
+### Distribution: Prime Number Theorem
+π(x) ~ x/ln(x) as x → ∞
+(number of primes up to x)"""
+
+KB["modular arithmetic"] = KB["congruence"] = KB["fermat's little theorem"] = KB["chinese remainder theorem"] = KB["euler's theorem"] = """## Modular Arithmetic
+
+**a ≡ b (mod n)** means n | (a - b)
+
+### Properties
+- Addition: a ≡ b, c ≡ d → a+c ≡ b+d (mod n)
+- Multiplication: a ≡ b, c ≡ d → ac ≡ bd (mod n)
+
+### Fermat's Little Theorem
+If p is prime and p ∤ a: **aᵖ⁻¹ ≡ 1 (mod p)**
+Or equivalently: **aᵖ ≡ a (mod p)** for all a
+
+### Euler's Theorem
+If gcd(a, n) = 1: **a^φ(n) ≡ 1 (mod n)**
+Where φ(n) = Euler's totient = number of integers 1 ≤ k ≤ n with gcd(k,n) = 1
+
+### Chinese Remainder Theorem (CRT)
+Solve simultaneous congruences:
+**x ≡ 3 (mod 5), x ≡ 2 (mod 7)**
+
+M = 5×7 = 35
+M₁ = 35/5 = 7 → Find y₁: 7y₁ ≡ 1 (mod 5) → y₁ = 3
+M₂ = 35/7 = 5 → Find y₂: 5y₂ ≡ 1 (mod 7) → y₂ = 3
+
+x = 3·7·3 + 2·5·3 = 63 + 30 = 93 ≡ **23 (mod 35)**
+
+### Find inverse of 7 mod 26
+Need x: 7x ≡ 1 (mod 26)
+By extended Euclidean: 7×15 = 105 = 4×26 + 1
+**Inverse = 15** (check: 7×15 = 105 = 4×26 + 1 ✓)"""
+
+KB["rsa algorithm"] = KB["rsa encryption"] = KB["cryptographic number theory"] = """## RSA Cryptosystem
+
+### Setup
+1. Choose two large primes p and q
+2. Compute n = pq (public modulus)
+3. Compute φ(n) = (p-1)(q-1)
+4. Choose e: gcd(e, φ(n)) = 1 (public exponent, often 65537)
+5. Find d: ed ≡ 1 (mod φ(n)) (private key)
+
+**Public key:** (n, e) | **Private key:** (n, d)
+
+### Encryption / Decryption
+**Encrypt:** C = Mᵉ mod n
+**Decrypt:** M = Cᵈ mod n
+
+### Why factoring is hard
+Security rests on: given n = pq (large), finding p and q is computationally infeasible.
+Best known algorithms (GNFS) run in sub-exponential but super-polynomial time.
+
+### Mini Example
+p=61, q=53 → n=3233, φ(n)=3120
+e=17 → d=2753 (ed=1 mod 3120)
+Encrypt M=65: C=65¹⁷ mod 3233 = 2790
+Decrypt: 2790²⁷⁵³ mod 3233 = 65 ✓"""
+
+KB["euler totient"] = KB["phi function"] = KB["compute phi(36)"] = """## Euler's Totient Function φ(n)
+
+**φ(n)** = number of integers from 1 to n that are coprime to n.
+
+### Formula for prime powers:
+- φ(p) = p - 1 (p prime)
+- φ(pᵏ) = pᵏ - pᵏ⁻¹ = pᵏ⁻¹(p - 1)
+- φ is multiplicative: φ(mn) = φ(m)φ(n) when gcd(m,n)=1
+
+### Compute φ(36):
+36 = 2² × 3²
+φ(36) = φ(4) × φ(9) = 2 × 6 = **12**
+
+Check: 1,5,7,11,13,17,19,23,25,29,31,35 → 12 numbers ✓
+
+### Number of divisors of 360:
+360 = 2³ × 3² × 5¹
+d(360) = (3+1)(2+1)(1+1) = 4 × 3 × 2 = **24 divisors**"""
+
+KB["riemann hypothesis"] = KB["riemann zeta function"] = KB["zeta function"] = """## The Riemann Zeta Function & Hypothesis
+
+**Definition:** ζ(s) = Σ(1/nˢ) for Re(s) > 1
+
+**Euler product formula:** ζ(s) = ∏(1/(1-p⁻ˢ)) over all primes p
+
+This connects the zeta function to prime distribution.
+
+### Analytic Continuation
+ζ(s) extends to all complex s ≠ 1 with a simple pole at s = 1.
+
+**Trivial zeros:** at s = -2, -4, -6, ... (negative even integers)
+**Non-trivial zeros:** all lie in the **critical strip** 0 < Re(s) < 1
+
+### The Riemann Hypothesis (UNSOLVED)
+> All non-trivial zeros of ζ(s) lie on the critical line Re(s) = 1/2
+
+**Why it matters:**
+- Gives precise error bounds on π(x) (prime counting function)
+- Would prove many theorems conditional on RH
+- One of the Millennium Prize Problems ($1,000,000 prize)"""
+
+KB["linear algebra"] = KB["vector spaces"] = KB["eigenvalues"] = KB["rank nullity theorem"] = """## Linear Algebra — Core Concepts
+
+### Vector Spaces
+A vector space V over field F satisfies 8 axioms (closure, associativity, commutativity, identity, inverses, distributivity).
+
+**Subspace:** A subset closed under addition and scalar multiplication.
+
+**Basis:** A linearly independent spanning set.
+**Dimension:** Number of basis vectors.
+
+### Linear Independence
+Vectors v₁,...,vₙ are **linearly independent** if:
+c₁v₁ + c₂v₂ + ... + cₙvₙ = 0 → all cᵢ = 0
+
+### Rank-Nullity Theorem
+For linear map T: V → W:
+**dim(V) = rank(T) + nullity(T)**
+(rank = dim of image, nullity = dim of kernel)
+
+### Eigenvalues and Eigenvectors
+**Av = λv** (v ≠ 0)
+**Characteristic equation:** det(A - λI) = 0
+
+**Example — 2×2 matrix:**
+A = [[3,1],[0,2]]
+det(A - λI) = (3-λ)(2-λ) = 0 → **λ = 3, λ = 2**
+
+For λ=3: (A-3I)v = 0 → v = [1,0]ᵀ
+For λ=2: (A-2I)v = 0 → v = [1,-1]ᵀ
+
+### Diagonalization
+A is diagonalizable if it has n linearly independent eigenvectors:
+A = PDP⁻¹ where D = diagonal eigenvalue matrix"""
+
+KB["abstract algebra"] = KB["group theory"] = KB["ring theory"] = KB["lagrange theorem"] = """## Abstract Algebra
+
+### Groups
+A **group** (G, ·) satisfies:
+1. **Closure:** a,b ∈ G → a·b ∈ G
+2. **Associativity:** (a·b)·c = a·(b·c)
+3. **Identity:** ∃e: e·a = a·e = a
+4. **Inverses:** ∀a ∃a⁻¹: a·a⁻¹ = e
+
+**Abelian group:** also satisfies a·b = b·a
+
+**Lagrange's Theorem:** |H| divides |G| for any subgroup H of finite group G.
+
+**Cyclic groups:** Generated by one element — every cyclic group is abelian.
+
+### Rings
+A **ring** (R, +, ·) is an abelian group under + with associative multiplication that distributes over +.
+
+**Integral domain:** Commutative ring with no zero divisors.
+**Field:** Integral domain where every nonzero element has a multiplicative inverse.
+
+**Examples:**
+- (ℤ, +, ×) is an integral domain but not a field
+- (ℚ, +, ×), (ℝ, +, ×), (ℂ, +, ×) are fields"""
+
+KB["galois theory"] = """## Galois Theory
+
+Explains **why the general quintic has no solution by radicals.**
+
+### Field Extensions
+**[L:K]** = degree of extension (dimension of L as K-vector space)
+**Algebraic extension:** every element satisfies a polynomial over K
+
+### Galois Group
+Gal(L/K) = group of field automorphisms of L fixing K pointwise.
+
+### Fundamental Theorem of Galois Theory
+There is a bijection between:
+- **Subgroups** of Gal(L/K)
+- **Intermediate fields** K ⊆ F ⊆ L
+
+### Solvability by Radicals
+A polynomial f(x) is solvable by radicals iff its Galois group is **solvable** (has a subnormal series with abelian quotients).
+
+**Degree 2, 3, 4:** Galois groups are solvable → quadratic/cubic/quartic formulas exist.
+**General degree 5 (quintic):** Galois group = S₅ (not solvable) → no general formula by radicals (Abel-Ruffini theorem)."""
+
+KB["calculus limits"] = KB["epsilon delta"] = KB["squeeze theorem"] = KB["l'hopital"] = """## Limits — Complete Guide
+
+### ε-δ Definition
+lim(x→a) f(x) = L means:
+For every ε > 0, there exists δ > 0 such that 0 < |x-a| < δ → |f(x)-L| < ε
+
+### Key Limit Laws
+- lim(f ± g) = lim f ± lim g
+- lim(fg) = lim f · lim g
+- lim(f/g) = lim f / lim g (if lim g ≠ 0)
+
+### Squeeze Theorem
+If g(x) ≤ f(x) ≤ h(x) near a and lim g = lim h = L, then lim f = L.
+
+**Classic:** lim(x→0) x·sin(1/x) = 0 (since -|x| ≤ x·sin(1/x) ≤ |x|)
+
+### L'Hôpital's Rule
+For 0/0 or ∞/∞ forms:
+lim f(x)/g(x) = lim f'(x)/g'(x)
+
+**Example:** lim(x→0) sin(x)/x = lim(x→0) cos(x)/1 = 1
+
+### Important Limits
+- lim(x→0) sin(x)/x = 1
+- lim(x→∞) (1 + 1/x)ˣ = e
+- lim(x→0) (eˣ - 1)/x = 1"""
+
+KB["differentiation rules"] = KB["chain rule"] = KB["product rule"] = KB["quotient rule"] = KB["differentiate from first principles"] = """## Differentiation — Complete Rules
+
+### Definition (First Principles)
+f'(x) = lim(h→0) [f(x+h) - f(x)] / h
+
+**Example from first principles — f(x) = x²:**
+= lim(h→0) [(x+h)² - x²] / h = lim(h→0) [2xh + h²] / h = **2x** ✓
+
+### Standard Rules
+| Function | Derivative |
+|----------|-----------|
+| xⁿ | nxⁿ⁻¹ |
+| eˣ | eˣ |
+| ln x | 1/x |
+| sin x | cos x |
+| cos x | -sin x |
+| tan x | sec²x |
+
+### Product Rule
+(uv)' = u'v + uv'
+
+### Quotient Rule
+(u/v)' = (u'v - uv') / v²
+
+### Chain Rule
+d/dx[f(g(x))] = f'(g(x)) · g'(x)
+
+**Example:** d/dx[sin(x²)] = cos(x²) · 2x
+
+### Mean Value Theorem
+If f is continuous on [a,b] and differentiable on (a,b):
+∃c ∈ (a,b) such that f'(c) = [f(b) - f(a)] / (b-a)"""
+
+KB["integration techniques"] = KB["integration by parts"] = KB["substitution method"] = KB["fundamental theorem of calculus"] = """## Integration — Complete Guide
+
+### Fundamental Theorem of Calculus
+**Part 1:** If F'(x) = f(x), then ∫ₐᵇ f(x)dx = F(b) - F(a)
+**Part 2:** d/dx[∫ₐˣ f(t)dt] = f(x)
+
+### Standard Integrals
+| Function | Integral |
+|----------|---------|
+| xⁿ (n≠-1) | xⁿ⁺¹/(n+1) + C |
+| 1/x | ln|x| + C |
+| eˣ | eˣ + C |
+| sin x | -cos x + C |
+| cos x | sin x + C |
+
+### Substitution (u-substitution)
+∫f(g(x))g'(x)dx → let u = g(x), du = g'(x)dx
+
+**Example:** ∫2x·cos(x²)dx → u=x², du=2xdx → ∫cos(u)du = sin(u)+C = **sin(x²)+C**
+
+### Integration by Parts
+∫u·dv = uv - ∫v·du (from product rule)
+
+**Example:** ∫x·eˣdx: u=x, dv=eˣdx → du=dx, v=eˣ
+= x·eˣ - ∫eˣdx = **xeˣ - eˣ + C**
+
+### Area Under Curve y=x² from 0 to 2:
+∫₀² x² dx = [x³/3]₀² = 8/3 - 0 = **8/3**"""
+
+KB["taylor series"] = KB["maclaurin series"] = KB["power series"] = """## Taylor & Maclaurin Series
+
+**Taylor Series** of f(x) about x = a:
+f(x) = Σ f⁽ⁿ⁾(a)/n! · (x-a)ⁿ
+
+**Maclaurin Series** (a = 0):
+f(x) = f(0) + f'(0)x + f''(0)x²/2! + f'''(0)x³/3! + ...
+
+### Key Maclaurin Series
+| Function | Series |
+|----------|--------|
+| eˣ | 1 + x + x²/2! + x³/3! + ... |
+| sin x | x - x³/3! + x⁵/5! - ... |
+| cos x | 1 - x²/2! + x⁴/4! - ... |
+| ln(1+x) | x - x²/2 + x³/3 - ... (|x|≤1) |
+| 1/(1-x) | 1 + x + x² + x³ + ... (|x|<1) |
+
+### Radius of Convergence
+Use **ratio test:** R = lim |aₙ/aₙ₊₁|
+
+### Applications
+- Approximate functions (e ≈ 1 + 1 + 1/2 + 1/6 + ... ≈ 2.718)
+- Evaluate difficult limits
+- Solve differential equations"""
+
+KB["differential equations"] = KB["ode"] = KB["separation of variables"] = """## Differential Equations
+
+### First-Order ODE: Separation of Variables
+dy/dx = f(x)g(y) → dy/g(y) = f(x)dx → integrate both sides
+
+**Example:** dy/dx = xy
+dy/y = x dx → ln|y| = x²/2 + C → **y = Ae^(x²/2)**
+
+### First-Order Linear ODE
+dy/dx + P(x)y = Q(x)
+**Integrating factor:** μ = e^(∫P dx)
+Solution: y = (1/μ)∫μQ dx
+
+### Second-Order ODE with Constant Coefficients
+ay'' + by' + cy = 0
+**Characteristic equation:** ar² + br + c = 0
+
+| Roots | Solution form |
+|-------|---------------|
+| Real distinct r₁, r₂ | y = Ae^(r₁x) + Be^(r₂x) |
+| Repeated root r | y = (A + Bx)e^(rx) |
+| Complex α ± βi | y = e^(αx)(A cos βx + B sin βx) |
+
+### Simple Harmonic Motion (SHM)
+m·x'' + kx = 0 → x'' + ω²x = 0, ω = √(k/m)
+Solution: **x = A cos(ωt) + B sin(ωt)** = R cos(ωt + φ)"""
+
+KB["quantum mechanics"] = KB["schrodinger equation"] = KB["schrodinger"] = KB["wavefunction"] = KB["heisenberg uncertainty"] = KB["uncertainty principle"] = KB["quantum numbers"] = KB["electron configuration"] = KB["atomic orbitals"] = KB["aufbau principle"] = """## Quantum Mechanics
+
+### Schrödinger Equation (Time-Independent)
+**Hψ = Eψ**
+- H = Hamiltonian operator (total energy)
+- ψ = wavefunction
+- E = energy eigenvalue
+
+For hydrogen: H = -(ħ²/2m)∇² - (Ze²/4πε₀r)
+
+### Wavefunction
+ψ(r, θ, φ) = R(r)·Y(θ, φ)
+- R(r): radial part
+- Y(θ, φ): spherical harmonics (angular part)
+
+**Probability density:** |ψ|²
+The wavefunction itself has no physical meaning — only |ψ|² gives probability.
+
+### Quantum Numbers
+| Symbol | Name | Values |
+|--------|------|--------|
+| n | Principal | 1, 2, 3, ... |
+| l | Angular momentum | 0 to n-1 |
+| mₗ | Magnetic | -l to +l |
+| mₛ | Spin | ±½ |
+
+### Energy Levels (Hydrogen)
+Eₙ = -13.6/n² eV
+
+### Heisenberg Uncertainty Principle
+**Δx · Δp ≥ ħ/2**
+(position and momentum cannot both be known precisely)
+
+**ΔE · Δt ≥ ħ/2**
+(energy and time uncertainty)
+
+### Electron Configuration Rules
+1. **Aufbau:** Fill lowest energy first (1s, 2s, 2p, 3s, ...)
+2. **Pauli Exclusion:** No two electrons with identical quantum numbers
+3. **Hund's Rule:** Fill orbitals singly before pairing (maximise spin)
+
+**Exceptions:**
+- Cr: [Ar] 3d⁵ 4s¹ (half-filled d is stable)
+- Cu: [Ar] 3d¹⁰ 4s¹ (full d is stable)"""
+
+KB["special relativity"] = KB["time dilation"] = KB["length contraction"] = KB["e=mc2"] = """## Special Relativity (Einstein, 1905)
+
+**Two Postulates:**
+1. Laws of physics are the same in all inertial frames
+2. Speed of light c is constant for all observers (~3×10⁸ m/s)
+
+### Lorentz Factor
+**γ = 1/√(1 - v²/c²)**
+
+### Time Dilation
+**Δt' = γ·Δt₀**
+Moving clocks run slow — a clock moving at velocity v ticks more slowly than one at rest.
+
+**Example:** Muon created in atmosphere travels at 0.99c.
+γ = 1/√(1-0.99²) ≈ 7.09
+Its lifetime appears 7× longer to us — it reaches Earth's surface.
+
+### Length Contraction
+**L' = L₀/γ**
+Objects moving at v appear shorter in the direction of motion.
+
+### Relativistic Energy
+**E = γmc²**
+**E₀ = mc²** (rest energy)
+**E² = (pc)² + (mc²)²**
+
+### Mass-Energy Equivalence
+**E = mc²** — 1 kg of mass = 9×10¹⁶ J
+
+### General Relativity (brief)
+Gravity is the curvature of spacetime caused by mass-energy.
+Einstein field equations: Gμν = 8πT·Tμν"""
+
+KB["thermodynamics laws"] = KB["first law thermodynamics"] = KB["second law thermodynamics"] = KB["entropy"] = """## Laws of Thermodynamics
+
+### Zeroth Law
+If A is in thermal equilibrium with B, and B with C, then A is in equilibrium with C.
+*This defines temperature.*
+
+### First Law (Conservation of Energy)
+**ΔU = Q - W**
+- ΔU = change in internal energy
+- Q = heat added to system
+- W = work done BY system
+
+### Second Law
+The total entropy of an isolated system always increases (or stays the same) over time.
+**ΔS ≥ 0** for isolated systems
+
+**Heat flows spontaneously from hot to cold.**
+
+**Carnot efficiency (maximum):** η = 1 - T_cold/T_hot
+
+### Third Law
+As temperature approaches absolute zero (0 K), entropy approaches a minimum value (0 for perfect crystals).
+
+### Entropy
+**S = k_B · ln(W)** (Boltzmann) — W = number of microstates
+ΔS = Q/T (reversible process)
+
+### Processes
+| Process | Condition | Formula |
+|---------|-----------|---------|
+| Isothermal | ΔT = 0 | W = nRT·ln(V₂/V₁) |
+| Adiabatic | Q = 0 | PV^γ = const |
+| Isobaric | ΔP = 0 | W = PΔV |
+| Isochoric | ΔV = 0 | W = 0 |"""
+
+KB["maxwell's equations"] = KB["electromagnetism"] = KB["electromagnetic waves"] = """## Maxwell's Equations
+
+The four equations that unify electricity and magnetism:
+
+**1. Gauss's Law (Electric):**
+∇·E = ρ/ε₀
+*Charge creates electric field lines.*
+
+**2. Gauss's Law (Magnetic):**
+∇·B = 0
+*No magnetic monopoles — field lines always form closed loops.*
+
+**3. Faraday's Law:**
+∇×E = -∂B/∂t
+*Changing magnetic field creates electric field.*
+
+**4. Ampere-Maxwell Law:**
+∇×B = μ₀J + μ₀ε₀(∂E/∂t)
+*Current and changing electric field create magnetic field.*
+
+### Electromagnetic Waves
+From Maxwell's equations, waves propagate at:
+**c = 1/√(μ₀ε₀) = 3×10⁸ m/s**
+
+This revealed light IS an electromagnetic wave.
+
+### Electromagnetic Spectrum (low→high frequency)
+Radio → Microwave → Infrared → Visible → UV → X-rays → Gamma rays"""
+
+KB["projectile motion"] = KB["kinematics 2d"] = """## Projectile Motion
+
+An object launched at angle θ with initial speed u:
+
+**Horizontal (no acceleration):**
+x = u·cosθ · t
+
+**Vertical (gravity acts):**
+y = u·sinθ · t - ½gt²
+vy = u·sinθ - gt
+
+**Time of flight:** T = 2u·sinθ / g
+
+**Maximum height:** H = u²sin²θ / (2g)
+
+**Range:** **R = u²sin(2θ) / g**
+
+**Maximum range at θ = 45°**
+
+**Example:** Ball launched at 20 m/s at 30°:
+- R = (20²·sin60°) / 9.81 = 400×0.866/9.81 ≈ **35.3 m**
+- H = (20²·sin²30°) / (2×9.81) = 400×0.25/19.62 ≈ **5.1 m**"""
+
+KB["simple harmonic motion"] = KB["shm"] = KB["oscillations"] = """## Simple Harmonic Motion (SHM)
+
+**Condition:** Restoring force proportional to displacement: F = -kx
+
+**Equation of motion:** mẍ = -kx → **ẍ + ω²x = 0**
+
+where **ω = √(k/m)** (angular frequency)
+
+**Solution:** x = A·cos(ωt + φ)
+- A = amplitude
+- ω = angular frequency (rad/s)
+- φ = phase constant
+
+**Period:** T = 2π/ω = 2π√(m/k)
+**Frequency:** f = 1/T = ω/(2π)
+
+### Energy in SHM
+- KE = ½mv² = ½mω²(A²-x²)
+- PE = ½kx²
+- Total E = ½kA² = constant ✓
+
+### Examples
+| System | ω | T |
+|--------|---|---|
+| Spring-mass | √(k/m) | 2π√(m/k) |
+| Simple pendulum | √(g/L) | 2π√(L/g) |
+| LC circuit | 1/√(LC) | 2π√(LC) |
+
+### Resonance
+When driving frequency = natural frequency → maximum amplitude → can cause structural failure"""
+
+KB["nuclear physics"] = KB["radioactivity"] = KB["nuclear decay"] = KB["half life"] = """## Nuclear Physics & Radioactivity
+
+### Types of Radiation
+| Type | Symbol | What it is | Penetration |
+|------|--------|-----------|-------------|
+| Alpha | α | ⁴₂He nucleus | Low (paper) |
+| Beta (-) | β⁻ | Electron | Medium (aluminium) |
+| Beta (+) | β⁺ | Positron | Medium |
+| Gamma | γ | High-energy photon | High (lead) |
+
+### Decay Law
+**N(t) = N₀ · e^(-λt)**
+- N₀ = initial number of nuclei
+- λ = decay constant
+- t₁/₂ = half-life = ln(2)/λ = 0.693/λ
+
+**Activity:** A = -dN/dt = λN = A₀·e^(-λt) (Becquerels)
+
+### Nuclear Reactions
+**Fission:** Heavy nucleus splits → enormous energy released
+²³⁵U + n → ⁹²Kr + ¹⁴¹Ba + 3n + energy (200 MeV)
+
+**Fusion:** Light nuclei combine → even more energy per kg
+²H + ³H → ⁴He + n + 17.6 MeV (powers the Sun)
+
+**Binding Energy:** E = Δm·c² (mass defect × c²)"""
+
+KB["standard model"] = KB["particle physics"] = KB["fundamental particles"] = KB["quarks"] = KB["leptons"] = KB["bosons"] = KB["higgs boson"] = KB["four fundamental forces"] = KB["force carriers"] = """## The Standard Model of Particle Physics
+
+### Fundamental Particles
+
+**Quarks (make up protons/neutrons):**
+Up (u), Down (d), Charm (c), Strange (s), Top (t), Bottom (b)
+
+**Leptons:**
+Electron (e), Muon (μ), Tau (τ) — each with their neutrino
+
+**Force carriers (bosons):**
+| Force | Boson |
+|-------|-------|
+| Electromagnetic | Photon (γ) |
+| Weak | W⁺, W⁻, Z⁰ |
+| Strong | Gluons (8) |
+| Gravity (not in SM) | Graviton (theoretical) |
+
+**Higgs boson:** Gives particles their mass (discovered 2012, CERN)
+
+### Proton and Neutron Composition
+- Proton: 2 up quarks + 1 down quark
+- Neutron: 1 up quark + 2 down quarks
+
+### Fundamental Forces (weakest to strongest)
+Gravity → Weak Nuclear → Electromagnetic → Strong Nuclear"""
+
+KB["conic sections"] = KB["parabola"] = KB["ellipse"] = KB["hyperbola"] = KB["circle equation"] = """## Conic Sections
+
+All derived by slicing a double cone with a plane.
+
+### Circle
+**(x-h)² + (y-k)² = r²**
+Centre (h,k), radius r
+
+### Parabola
+Standard form (vertex at origin): **y = ax²** or **x = ay²**
+Vertex form: **y = a(x-h)² + k** (vertex at (h,k))
+Focus at (0, 1/4a); directrix y = -1/4a
+
+### Ellipse
+**(x/a)² + (y/b)² = 1** (a > b)
+- Semi-major axis a (along x)
+- Semi-minor axis b (along y)
+- Foci at (±c, 0) where c² = a² - b²
+- Eccentricity e = c/a (0 < e < 1)
+
+### Hyperbola
+**(x/a)² - (y/b)² = 1**
+- Foci at (±c, 0) where c² = a² + b²
+- Asymptotes: y = ±(b/a)x
+- Eccentricity e = c/a (e > 1)
+
+### Classifying ax² + bxy + cy² + ... = 0
+Using discriminant B² - 4AC:
+- B²-4AC < 0: **ellipse** (or circle if A=C, B=0)
+- B²-4AC = 0: **parabola**
+- B²-4AC > 0: **hyperbola**"""
+
+KB["trigonometric identities"] = KB["trig identities"] = KB["law of sines"] = KB["law of cosines"] = """## Trigonometry — Complete Reference
+
+### Pythagorean Identities
+- **sin²θ + cos²θ = 1**
+- 1 + tan²θ = sec²θ
+- 1 + cot²θ = csc²θ
+
+### Angle Sum Identities
+- sin(A±B) = sinA·cosB ± cosA·sinB
+- cos(A±B) = cosA·cosB ∓ sinA·sinB
+- tan(A±B) = (tanA ± tanB)/(1 ∓ tanA·tanB)
+
+### Double Angle
+- sin(2A) = 2sinA·cosA
+- cos(2A) = cos²A - sin²A = 1 - 2sin²A = 2cos²A - 1
+- tan(2A) = 2tanA/(1-tan²A)
+
+### Law of Sines
+**a/sinA = b/sinB = c/sinC = 2R**
+(a, b, c = sides; A, B, C = opposite angles; R = circumradius)
+
+### Law of Cosines
+**c² = a² + b² - 2ab·cosC**
+(generalisation of Pythagoras — use when 3 sides or 2 sides + included angle known)
+
+### Key Values
+| θ | sin | cos | tan |
+|---|-----|-----|-----|
+| 0° | 0 | 1 | 0 |
+| 30° | ½ | √3/2 | 1/√3 |
+| 45° | √2/2 | √2/2 | 1 |
+| 60° | √3/2 | ½ | √3 |
+| 90° | 1 | 0 | ∞ |"""
+
+KB["organic chemistry"] = KB["functional groups"] = KB["hydrocarbons"] = KB["sn1 sn2"] = KB["sn1"] = KB["sn2"] = KB["elimination reaction"] = KB["nucleophilic substitution"] = KB["addition reaction"] = KB["organic reactions"] = KB["electrophilic aromatic substitution"] = KB["eas"] = KB["markovnikov"] = """## Organic Chemistry — Complete Guide
+
+### Functional Groups
+| Group | Formula | Name suffix |
+|-------|---------|-------------|
+| Alkane | C-C | -ane |
+| Alkene | C=C | -ene |
+| Alkyne | C≡C | -yne |
+| Alcohol | -OH | -ol |
+| Aldehyde | -CHO | -al |
+| Ketone | C=O | -one |
+| Carboxylic acid | -COOH | -oic acid |
+| Ester | -COO- | -oate |
+| Amine | -NH₂ | -amine |
+| Amide | -CONH₂ | -amide |
+
+### Reaction Types
+**Addition (alkenes):**
+CH₂=CH₂ + HBr → CH₃CH₂Br (Markovnikov: H adds to more H-bearing carbon)
+
+**Substitution (alkanes):**
+CH₄ + Cl₂ → CH₃Cl + HCl (radical chain mechanism)
+
+### Nucleophilic Substitution Pattern Recognition
+| Condition | Mechanism |
+|-----------|-----------|
+| Primary substrate + strong nucleophile | **SN2** (inversion, one step) |
+| Tertiary substrate | **SN1** (carbocation intermediate) |
+| Strong base + any substrate | **E2** (elimination, anti-periplanar) |
+| Weak nucleophile + tertiary | **SN1/E1** |
+
+**SN2 Mechanism:**
+Nu: + R-LG → [Nu---R---LG]‡ → Nu-R + LG⁻
+(backside attack, Walden inversion)
+
+**SN1 Mechanism:**
+Step 1: R-LG → R⁺ + LG⁻ (slow, rate-determining)
+Step 2: R⁺ + Nu: → R-Nu (fast, racemisation)
+
+### Aromatic Chemistry
+**Benzene:** 6π electrons, sp² hybridised, delocalised
+**Electrophilic aromatic substitution (EAS):**
+Benzene + E⁺ → arenium ion → deprotonation → substituted benzene
+
+**Activating groups (ortho/para directors):** -OH, -NH₂, -OR, -R
+**Deactivating groups (meta directors):** -NO₂, -CN, -CHO, -COOH
+
+### Solving Algorithm
+1. Identify functional group
+2. Identify reagent
+3. Determine reaction type
+4. Choose mechanism (SN1/SN2/E1/E2/Addition/EAS)
+5. Track electron movement (curly arrows)
+6. Predict product
+7. Check stereochemistry (R/S, E/Z)"""
+
+KB["biomolecules"] = KB["proteins"] = KB["carbohydrates"] = KB["lipids"] = KB["nucleic acids dna rna"] = """## Biomolecules — Advanced Biology
+
+### Proteins
+**Structure levels:**
+- **Primary:** Amino acid sequence (peptide bonds)
+- **Secondary:** α-helix, β-pleated sheet (H-bonds between backbone)
+- **Tertiary:** 3D folding (H-bonds, ionic, Van der Waals, disulfide bridges)
+- **Quaternary:** Multiple polypeptide chains
+
+**20 amino acids** — defined by R group (side chain)
+**Peptide bond:** H₂N-CHR-COOH + H₂N-CHR'-COOH → dipeptide + H₂O
+
+### Carbohydrates
+- **Monosaccharides:** Glucose (C₆H₁₂O₆), Fructose, Galactose
+- **Disaccharides:** Sucrose (glucose + fructose), Lactose, Maltose
+- **Polysaccharides:** Starch, Glycogen (storage), Cellulose (structure)
+
+**Glucose molecular formula:** C₆H₁₂O₆
+**General formula:** Cₙ(H₂O)ₙ or Cₙ(H₂O)ₘ
+
+### Lipids (Fats)
+- Glycerol backbone + 3 fatty acid chains (triglycerides)
+- **Saturated:** No double bonds (solid at room temp) — animal fats
+- **Unsaturated:** One+ double bonds (liquid) — plant oils
+- **Phospholipids:** Form cell membranes (hydrophilic head, hydrophobic tails)
+
+### Nucleic Acids
+**DNA:** Deoxyribose + phosphate + bases (A, T, G, C)
+**RNA:** Ribose + phosphate + bases (A, U, G, C)
+**Base pairing:** A-T (2 H-bonds), G-C (3 H-bonds) in DNA
+**mRNA** carries genetic code; **tRNA** carries amino acids; **rRNA** forms ribosomes"""
+
+KB["cell respiration"] = KB["aerobic respiration"] = KB["krebs cycle"] = KB["atp"] = """## Cellular Respiration — Complete
+
+**Overall equation:**
+C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + **ATP (energy)**
+
+### Stage 1: Glycolysis (cytoplasm)
+Glucose (6C) → 2 Pyruvate (3C)
+**Net yield: 2 ATP, 2 NADH**
+
+### Stage 2: Pyruvate Oxidation (mitochondrial matrix)
+2 Pyruvate → 2 Acetyl-CoA
+Releases 2 CO₂, produces 2 NADH
+
+### Stage 3: Krebs Cycle / TCA Cycle (matrix)
+Each acetyl-CoA cycle produces:
+3 NADH, 1 FADH₂, 1 ATP, 2 CO₂
+**Total (×2): 6 NADH, 2 FADH₂, 2 ATP**
+
+### Stage 4: Oxidative Phosphorylation (inner membrane)
+Electron transport chain:
+- NADH → 2.5 ATP
+- FADH₂ → 1.5 ATP
+Oxygen is the final electron acceptor → water formed
+
+**Total ATP yield: ~30-32 ATP per glucose molecule**
+
+### Anaerobic Respiration (no oxygen)
+- **Lactic acid fermentation** (animals, bacteria): Glucose → 2 lactic acid + 2 ATP
+- **Alcoholic fermentation** (yeast): Glucose → 2 ethanol + 2 CO₂ + 2 ATP"""
+
+KB["genetics"] = KB["mendel's laws"] = KB["inheritance"] = KB["punnett square"] = """## Genetics & Inheritance
+
+### Mendel's Laws
+**Law of Segregation:** Each organism has 2 alleles for each gene; these separate during gamete formation.
+**Law of Independent Assortment:** Alleles for different genes segregate independently (if on different chromosomes).
+
+### Key Terms
+- **Genotype:** Genetic makeup (AA, Aa, aa)
+- **Phenotype:** Physical expression (tall, short)
+- **Homozygous:** Both alleles same (AA or aa)
+- **Heterozygous:** Different alleles (Aa)
+- **Dominant:** Expressed when one copy present (A_)
+- **Recessive:** Only expressed when homozygous (aa)
+
+### Punnett Square — Monohybrid Cross
+Tall (Tt) × Tall (Tt):
+
+|   | T | t |
+|---|---|---|
+| T | TT | Tt |
+| t | Tt | tt |
+
+Ratio: 3 Tall : 1 Short (3:1 phenotype ratio)
+Genotype: 1 TT : 2 Tt : 1 tt
+
+### Dihybrid Cross
+AABB × aabb → F1: all AaBb
+F2: 9 A_B_ : 3 A_bb : 3 aaB_ : 1 aabb (9:3:3:1 ratio)
+
+### Sex Determination
+Human males: XY | Females: XX
+X-linked traits: passed on X chromosome (e.g., haemophilia, colour blindness)
+Carrier females: X^H X^h — don't express but pass gene"""
+
+KB["ecology"] = KB["food chains"] = KB["ecosystems"] = KB["population ecology"] = """## Ecology
+
+### Ecosystem Levels
+**Individual → Population → Community → Ecosystem → Biosphere**
+
+### Energy Flow
+**Food chain:** Producer → Primary consumer → Secondary → Tertiary consumer
+**10% Rule:** Only ~10% of energy transfers between trophic levels
+(90% lost as heat, movement, waste)
+
+**Food web:** Multiple interconnected food chains
+
+### Ecological Relationships
+| Relationship | Species A | Species B |
+|--------------|-----------|-----------|
+| Predation | + | - |
+| Parasitism | + | - |
+| Mutualism | + | + |
+| Commensalism | + | 0 |
+| Competition | - | - |
+
+### Population Growth
+**Exponential:** dN/dt = rN (unlimited resources)
+**Logistic:** dN/dt = rN(1 - N/K) — K = carrying capacity
+
+### Nutrient Cycles
+**Carbon cycle:** Photosynthesis (fix) → respiration, combustion (release)
+**Nitrogen cycle:** N₂ → fixation → nitrification → denitrification → N₂
+
+### Biodiversity & Conservation
+**Species richness** = number of species
+**Threats:** Habitat destruction, climate change, overexploitation, invasive species
+**Solutions:** Protected areas, habitat corridors, captive breeding, legislation"""
+
 # ══════════════════════════════════════════════════════════════════════════════
 # TOOL HANDLERS
 # ══════════════════════════════════════════════════════════════════════════════
